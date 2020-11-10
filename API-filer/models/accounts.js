@@ -1,31 +1,26 @@
 const mongoose = require('mongoose');
+const express = require('express');
+const router = express.Router();
 
-// Jeg laver et "account" skema, som definere hvordan en account gemmes i min database
+// Jeg laver et "account" skema
 const AccountSchema = new mongoose.Schema({
 
     // Alle som strings, udover "id"
-    id: {
+    _id: mongoose.Schema.Types.ObjectId,
+
+    client_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Client',
+        required: true,
+    },
+    balance: {
         type: Number,
         required: true,
     },
-    firstName: {
+    alias: {
         type: String,
-        required: true,
-    },
-    lastName: {
-        type: String,
-        required: true,
-    },
-    street_address: {
-        type: String,
-        required: true,
-    },
-    city: {
-        type: String,
-        required: true,
+        required: false,
     }
 });
-
 const model = mongoose.model('Account', AccountSchema);
-
 module.exports = model;

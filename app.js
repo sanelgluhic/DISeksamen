@@ -20,6 +20,10 @@ app.use(bodyParser.json());
 const clientsRoute = require('./API-filer/routes/clients');
 app.use('/clients', clientsRoute);
 
+const accountsRoute = require('./API-filer/routes/accounts');
+app.use('/accounts', accountsRoute);
+
+
 var credentials = {key: fs.readFileSync(path.join(__dirname, 'cerKey', 'key.pem')),
     cert: fs.readFileSync(path.join(__dirname, 'cerKey', 'cert.pem'))};
 

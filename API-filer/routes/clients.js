@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Client = require('../models/clients');
 const mongoose = require('mongoose');
-// const confirm = require('node-popup');
 
 // [0] Test funktion
 router.get('/', async (req, res) => {
@@ -11,7 +10,7 @@ router.get('/', async (req, res) => {
 });
 
 // [1] Hent alle eksisterende kunder
-router.get('/hentClienter', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         // 1. return accounts from database instead
         return res.json(await Client.find({})
@@ -40,7 +39,7 @@ router.post('/:firstName/:lastName/:street_address/:city', async (req, res) => {
             console.log(result);
             res.status(201).json({
                 message: "Bruger oprettet",
-                createdUser: result
+                createdClient: result
             });
         })
         // Hvis oprettelsen IKKE lykedes, catcher vi fejlen
@@ -63,8 +62,30 @@ router.get('/:id', async (req, res) => {
     };
 });
 
-// [4] Opdater en clients oplysninger
-router.put('/id/:firstName/:lastName/:street_address/:city', async (req, res) => {
+// [4] Opdater en eksisterende kundes oplysninger
+router.put('/:id', function (req, res, next) {
+    /* Måden hvorpå denne funktion fungerer, er ved at der via postman sendes et "body" afsted med det, som man
+    ønsker at opdatere. Herefter vil den enkelte del som sendes, blive opdateret i databasen. Selve
+    funktionen vil retunere det opdaterede objekt */
+
+    /* findByIdAndUpdate finder brugeren i databasen og opdatere dens oplysninger. Selve funktionen indtager
+    et "id" som parameter. Her specificeres den ønskede id som skal opdateres.
+    "req.body" angiver det body som
+    opdatere den eksisterende information i databasen */
+    Client.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(client){
+        Client.findOne({_id: req.params.id}).then(function(client){
+            res.send("Følgende bruger er blevet opdateret: \n" + client);
+        });
+    });
+});
+
+// [5] Sletter kunde med specifikt id fra database
+router.delete('/:id', function (req, res, next) {
+    // Client referer til Client model (mongoose model)
+    mongoose.set('useFindAndModify', false);
+    Client.findByIdAndRemove({_id: req.params.id}).then((function(client){
+        res.send("Følgende bruger er blevet slettet: \n" + client);
+    }));
 });
 
 module.exports = router;
