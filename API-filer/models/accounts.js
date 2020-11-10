@@ -1,25 +1,26 @@
 const mongoose = require('mongoose');
 
-// Jeg laver et "client" skema
+// Jeg laver et "account" skema, som definere hvordan en account gemmes i min database
 const AccountSchema = new mongoose.Schema({
 
     // Alle som strings, udover "id"
-
-    // I tivl om Id skal med i skemaet??
-   /* id: {
-        type: objectId,
-        required: true,
-    },
-    */
-    client_id: {
-        type: String,
-        required: true,
-    },
-    balance: {
+    id: {
         type: Number,
         required: true,
     },
-    alias: {
+    firstName: {
+        type: String,
+        required: true,
+    },
+    lastName: {
+        type: String,
+        required: true,
+    },
+    street_address: {
+        type: String,
+        required: true,
+    },
+    city: {
         type: String,
         required: true,
     }
