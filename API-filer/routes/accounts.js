@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const objectId = require('mongoose').Types.ObjectId;
 
 const Account = require('../models/accounts');
 const Client = require('../models/clients');
@@ -18,34 +17,23 @@ router.get('/', async (req, res) => {
 });
 
 // [2] Opretter en ny konto til en client
-router.post('/:client_id/:balance', async (req, res) => {
-    /* Ud fra URL'en, så henter systemet de enkelte dele, (client_id og balance). Ud fra disse værdier så
-    oprettes der et account til den specifikke bruger */
-    const account = new Account({
-        // Parameterne i URL'en opfanges ved "req.params"
-        _id: new mongoose.Types.ObjectId(),
-        client_id: req.params.client_id,
-        balance: req.params.balance,
-        alias: '',
-    });
-    // Den oprettet en account til en client med de ovenstående værdier
-    account
-        .save()
-        .then(result => {
-            console.log(result);
-            res.status(201).json({
-                message: "Account til følgende client_Id " + req.params.client_id + " er oprettet",
-                createdAccount: result
-            });
+router.post('/', async (req, res) => {
+        // For IKKE at skulle sende et ID med i body'en, så oprettes der et ID til en konto
+        const _id = new mongoose.Types.ObjectId;
+        req.body._id = _id;
+
+        // Ud fra bodyen'en, så henter systemet de enkelte parametre, som skal bruges til oprettelse af en konto
+        Account.create(req.body).then(function(account){
+            res.send(account); // Opretter en ny instans af et account-objekt og sender det til klienten
         })
-        // Hvis oprettelsen IKKE lykedes, catcher vi fejlen
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err,
-                message: 'Fejl i oprettelsen'
+            // Hvis oprettelsen af konto ikke lykkedes, catcher vi fejlen
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err,
+                    message: 'Fejl i oprettelsen'
+                });
             });
-        });
 });
 
 // [3] Retunere en specifik konto
@@ -55,17 +43,16 @@ router.get('/:id', async (req, res) => {
         res.end("Følgende konto tilfører det specificerede id: " + "\n" + accounts)
     } catch (err) {
         console.log({ message: err })
-    };
+    }
 });
 
 // [4] Ændrer en kontos balance
 router.put('/:id', function (req, res, next) {
-    /* */
-    mongoose.set('useFindAndModify', false);
-    Account.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(account){
+    // $set medfører at balancen i den fundne account sættes til at være det, som sendes med i body'et
+    Account.findByIdAndUpdate({_id: req.params.id}, {$set : {"balance" : req.body.balance}}).then(function(account){
         Account.findOne({_id: req.params.id}).then(function(account){
-            res.send("Følgende accounts balance er blevet opdateret: \n" + account);
-        });
+            res.send("Account updated \n" + account);
+        })
     });
 });
 
@@ -88,8 +75,6 @@ router.get('/:id/balance', async (req, res) => {
     });
 });
 
-// [7] Overfør penge fra en konto til en anden konto
-router.get('/transfer', async (req, res) => {};
 
 
 module.exports = router;

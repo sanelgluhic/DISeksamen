@@ -21,28 +21,17 @@ router.get('/', async (req, res) => {
 });
 
 // [2] Opret ny kunde
-router.post('/:firstName/:lastName/:street_address/:city', async (req, res) => {
-    /* Ud fra URL'en, så henter systemet de enkelte dele, altså firstName, lastName, osv og ud fra disse værdier,
-    vil der oprettes en bruger. */
-    const client = new Client({
-        // Parameterne i URL'en opfanges ved "req.params"
-        _id: new mongoose.Types.ObjectId(),
-        firstName: req.params.firstName,
-        lastName: req.params.lastName,
-        street_address: req.params.street_address,
-        city: req.params.city
-    });
-    // Den oprettet en cilent med de ovenstående værdier
-    client
-        .save()
-        .then(result => {
-            console.log(result);
-            res.status(201).json({
-                message: "Bruger oprettet",
-                createdClient: result
-            });
-        })
-        // Hvis oprettelsen IKKE lykedes, catcher vi fejlen
+router.post('/', async (req, res) => {
+
+    // For IKKE at skulle sende et ID med i body'en, så oprettes der et ID til en client
+    const _id = new mongoose.Types.ObjectId;
+    req.body._id = _id;
+
+    // Ud fra bodyen'en, så henter systemet de enkelte parametre, som skal bruges til oprettelse af en bruger
+    Client.create(req.body).then(function(client){
+        res.send(client); // Opretter en ny instans af et client-objekt og sender det til klienten
+    })
+        // Hvis oprettelsen af klienten ikke lykkedes, catcher vi fejlen
         .catch(err => {
             console.log(err);
             res.status(500).json({
