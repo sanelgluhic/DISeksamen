@@ -3,12 +3,6 @@ const router = express.Router();
 const Client = require('../models/clients');
 const mongoose = require('mongoose');
 
-// [0] Test funktion
-router.get('/', async (req, res) => {
-    console.log('Denne funktion triggers');
-    res.send('Hej - jeg går klart igennem ruten "https://localhost:3443/client')
-});
-
 // [1] Hent alle eksisterende kunder
 router.get('/', async (req, res) => {
     try {
@@ -22,7 +16,6 @@ router.get('/', async (req, res) => {
 
 // [2] Opret ny kunde
 router.post('/', async (req, res) => {
-
     // For IKKE at skulle sende et ID med i body'en, så oprettes der et ID til en client
     const _id = new mongoose.Types.ObjectId;
     req.body._id = _id;
@@ -43,12 +36,22 @@ router.post('/', async (req, res) => {
 
 // [3] Læs specifick kundes oplysninger
 router.get('/:id', async (req, res) => {
-    try {
-        const clients = await Client.findById(req.params.id);
-        res.end("This is the endpoint for: " + "\n" + clients)
-    } catch (err) {
-        console.log({ message: err })
-    };
+    const id = req.params.id;
+    Client.findById(id)
+        .exec()
+        .then(doc => {
+            if (doc) {
+                res.status(200).json(doc);
+            } else {
+                res
+                    .status(404)
+                    .json({ message: " " });
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ error: err });
+        });
 });
 
 // [4] Opdater en eksisterende kundes oplysninger
@@ -72,8 +75,10 @@ router.put('/:id', function (req, res, next) {
 router.delete('/:id', function (req, res, next) {
     // Client referer til Client model (mongoose model)
     mongoose.set('useFindAndModify', false);
-    Client.findByIdAndRemove({_id: req.params.id}).then((function(client){
-        res.send("Følgende bruger er blevet slettet: \n" + client);
+    Client.findByIdAndRemove({_id: req.params.id})
+        .then((function(client){
+        res.status(200);
+        res.send(client);
     }));
 });
 
