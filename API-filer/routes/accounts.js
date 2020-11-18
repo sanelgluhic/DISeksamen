@@ -7,49 +7,25 @@ const Client = require('../models/clients');
 
 // [5] Overfører penge fra en konto til en anden
 router.put('/transfer', async (req, res, next) => {
-    let fromAccount = await Account.findById(req.body.fromAccount).exec();
-    console.log(fromAccount);
-    let toAccount = await Account.findById(req.body.toAccount).exec();
-    console.log(toAccount);
-
-    let amount = req.body.amount;
-    console.log(amount);
-
-    await Account.findByIdAndUpdate(fromAccount, {balance: fromAccount - amount}).exec();
-    await Account.findByIdAndUpdate(toAccount, {balance: toAccount + amount}).exec();
-
-    res.end('Overført ' + ammount + 'til ' + toAccount.alias + ' fra ' + fromAccount.alias);
-
-    /*
-    const fromAccount = await Account.findByIdAndUpdate({ _id: req.body.fromAccount },
-        {$inc : {balance : -amount}}, {useFindAndModify:false}).exec();
-
-    const toAccount = await Account.findByIdAndUpdate({ _id: req.body.toAccount },
-        {$inc : {balance : amount}}, {useFindAndModify:false}).exec();
-
-
-
-     */
-});
+    //[7] Overfører penge fra en konto til en anden
+        const amount = parseInt(req.body.amount);
+        const fromAccount = await Account.findOneAndUpdate({ _id: req.body.fromAccount },{
+            $inc: { balance : -amount }
+        },{useFindAndModify:false}).exec();
+        const toAccount = await Account.findOneAndUpdate({ _id: req.body.toAccount }, {
+            $inc: { balance : amount }
+        }, {useFindAndModify:false}).exec();
+        res.status(200).json('transfered ' + amount + ' to ' + toAccount.alias + ' from ' + fromAccount.alias)
+    });
 
 // [4] Ændrer en kontos balance
 router.put('/:id', async (req, res, next) => {
-    const id = req.params.id;
-    Account.update({ _id: id }, {$set : {"balance" : req.body.balance}})
-        .exec()
-        .then(doc => {
-            Account.find({_id:id}).exec().then(doc2 => {
-                res.status(200);
-                console.log(doc2);
-                res.send(JSON.stringify(doc2));
-            });
+    // $set medfører at balancen i den fundne account sættes til at være det, som sendes med i body'et
+    Account.findByIdAndUpdate({_id: req.params.id}, {$set : {balance : req.body.balance, alias: req.body.alias }}).then(function(account){
+        Account.findOne({_id: req.params.id}).then(function(account){
+            res.status(200).json(account);
         })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
+    });
 });
 
 // [1] Hent alle eksisterende accounts

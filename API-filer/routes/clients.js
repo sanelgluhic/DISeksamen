@@ -66,7 +66,7 @@ router.put('/:id', function (req, res, next) {
     opdatere den eksisterende information i databasen */
     Client.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(client){
         Client.findOne({_id: req.params.id}).then(function(client){
-            res.send("Følgende bruger er blevet opdateret: \n" + client);
+            res.send(client);
         });
     });
 });
