@@ -4,8 +4,6 @@ const router = express.Router();
 
 // Aaccount skema oprettes
 const AccountSchema = new mongoose.Schema({
-
-    // Alle som strings, udover "id"
     _id: mongoose.Schema.Types.ObjectId,
 
     client_id: {
