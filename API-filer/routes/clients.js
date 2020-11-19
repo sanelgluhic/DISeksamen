@@ -1,3 +1,4 @@
+// Her requires noget forskelligt
 const express = require('express');
 const router = express.Router();
 const Client = require('../models/clients');
@@ -7,7 +8,7 @@ mongoose.set('useFindAndModify', false); // Ellers kommer der fejl op
 // [1] Hent alle eksisterende kunder
 router.get('/', async (req, res) => {
     try {
-        // 1. return accounts from database instead
+        // Finder og retunerer alle clients fra databasen
         return res.json(await Client.find({})
         .exec());
     } catch (err) {
@@ -17,15 +18,16 @@ router.get('/', async (req, res) => {
 
 // [2] Opret ny kunde
 router.post('/', async (req, res) => {
-    // For IKKE at skulle sende et ID med i body'en, så oprettes der et ID til en client
+    // Et unikt _id oprettes til en ny client
     const _id = new mongoose.Types.ObjectId;
     req.body._id = _id;
 
-    // Ud fra bodyen'en, så henter systemet de enkelte parametre, som skal bruges til oprettelse af en bruger
+    /* De enkelte parametre hentes ud fra body'et som sendes med i requestet.
+    Parametrene bruges til oprettelse af en ny bruger */
     Client.create(req.body).then(function(client){
-        res.send(client); // Opretter en ny instans af et client-objekt og sender det til klienten
+        // instans af client-objekt oprettes og sendes til klient
+        res.send(client);
     })
-        // Hvis oprettelsen af klienten ikke lykkedes, catcher vi fejlen
         .catch(err => {
             console.log(err);
             res.status(500).json({
@@ -37,11 +39,14 @@ router.post('/', async (req, res) => {
 
 // [3] Læs specifick kundes oplysninger
 router.get('/:id', async (req, res) => {
+    // _id'et hentes og defineres som en variabel fra body'et
     const id = req.params.id;
+    // finder den specefikke client i databasen ud fra id'et
     Client.findById(id)
         .exec()
         .then(doc => {
             if (doc) {
+                // client-instansen sendes retur med statuskode 200
                 res.status(200).json(doc);
             } else {
                 res
@@ -56,16 +61,10 @@ router.get('/:id', async (req, res) => {
 });
 
 // [4] Opdater en eksisterende kundes oplysninger
-router.put('/:id', function (req, res, next) {
-    /* Måden hvorpå denne funktion fungerer, er ved at der via postman sendes et "body" afsted med det, som man
-    ønsker at opdatere. Herefter vil den enkelte del som sendes, blive opdateret i databasen. Selve
-    funktionen vil retunere det opdaterede objekt */
-
-    /* findByIdAndUpdate finder brugeren i databasen og opdatere dens oplysninger. Selve funktionen indtager
-    et "id" som parameter. Her specificeres den ønskede id som skal opdateres.
-    "req.body" angiver det body som
-    opdatere den eksisterende information i databasen */
+router.put('/:id', async (req, res) => {
+    // Ud fra body'et opdateres feltet/felterne i client-documentet, i databasen, med nye værdier
     Client.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(client){
+        // Den opdaterede client retuneres
         Client.findOne({_id: req.params.id}).then(function(client){
             res.send(client);
         });
@@ -73,11 +72,11 @@ router.put('/:id', function (req, res, next) {
 });
 
 // [5] Sletter kunde med specifikt id fra database
-router.delete('/:id', function (req, res, next) {
-    // Client referer til Client model (mongoose model)
-    mongoose.set('useFindAndModify', false);
+router.delete('/:id', async (req, res) => {
+    // Client findes i databasen på baggrund af id'et som sendes i body'et og derefter slettes clienten i databasen
     Client.findByIdAndRemove({_id: req.params.id})
         .then((function(client){
+            // Statuskode 200 og den slettede client sendes til klient
         res.status(200);
         res.send(client);
     }));

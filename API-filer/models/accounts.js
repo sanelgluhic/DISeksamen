@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 
-// Jeg laver et "account" skema
+// Aaccount skema oprettes
 const AccountSchema = new mongoose.Schema({
 
     // Alle som strings, udover "id"

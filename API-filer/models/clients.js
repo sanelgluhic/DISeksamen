@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Jeg laver et "client" skema
+// Client skema oprettes
 const ClientSchema = new mongoose.Schema({
     // Alle som strings, udover "id"
         _id: mongoose.Schema.Types.ObjectId,
