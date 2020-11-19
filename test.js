@@ -6,7 +6,7 @@ const Account = require('./API-filer/models/accounts');
 const fetch = require("node-fetch");
 const chai = require("chai");
 const should = chai.should();
-const config = require("./load-balancer");
+// const config = require("./load-balancer"); Jeg starter load-balancer i "npm start"
 // const expect = require('chai').expect;
 const chaiHttp = require("chai-http");
 const { expect } = require("chai");
@@ -36,14 +36,6 @@ const accountTemplate = () => {
         alias: `TEST account ${Math.floor(Math.random() * 10)}`,
     };
 };
-
-// before((done) => {
-// Account.remove({}, () => {
-//     Client.remove({}, () => {
-//         done();
-//     });
-// });
-// });
 
 describe("Client tests", () => {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+mongoose.set('useFindAndModify', false);  // Ellers kommer der fejl op
 
 const Account = require('../models/accounts');
 const Client = require('../models/clients');

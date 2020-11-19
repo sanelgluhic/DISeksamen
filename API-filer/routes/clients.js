@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Client = require('../models/clients');
 const mongoose = require('mongoose');
+mongoose.set('useFindAndModify', false); // Ellers kommer der fejl op
 
 // [1] Hent alle eksisterende kunder
 router.get('/', async (req, res) => {
