@@ -21,6 +21,7 @@ var server = http.createServer({key: fs.readFileSync(path.join(__dirname, 'cerKe
     var host = addresses[i].host.split(":").reverse()[0];
     var port = addresses[i].port;
     proxy.web(req, res, { target: 'https://' + host + ':' + port , secure:false});
+    console.log("Loadbalancer tildeler den indkommende request, til følgende server på port: " + port)
 });
 
 server.listen(3443, function () {
