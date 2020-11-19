@@ -83,7 +83,7 @@ router.get('/:id', async (req, res) => {
         });
 });
 
-// [4] Ændrer en kontos balance
+// [4] Ændrer en specifik kontos balance
 router.put('/:id', async (req, res) => {
     // Ud fra body'et opdateres felterne "balance" og "alias" i account-documentet, i databasen, med nye værdier
     Account.findByIdAndUpdate({_id: req.params.id}, {$set : {balance : req.body.balance, alias: req.body.alias}})
@@ -105,7 +105,7 @@ router.delete('/:id', async (req, res) => {
     }));
 });
 
-// [6] Retunere en specifik kontos balance
+// [6] Retunere en specifik kontos balance i formen {balance:200}
 router.get('/:id/balance', async (req, res) => {
     // Account findes i databasen på baggrund af id'et som sendes i body'et
     Account.findById({_id: req.params.id})
