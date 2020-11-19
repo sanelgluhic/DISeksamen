@@ -17,7 +17,7 @@ const AccountSchema = new mongoose.Schema({
     },
     alias: {
         type: String,
-        required: false,
+        required: true,
     }
 });
 const model = mongoose.model('Account', AccountSchema);
