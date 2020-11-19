@@ -26,8 +26,8 @@ npm start
 ```
 
 ### Step 2 - eksekver testen
-Kør "test.js" fra mappen "\DISeksamen" for at teste systemet
+Kør "test.js" fra mappen "\DISeksamen", for at teste systemet
 
 ```bash
-node test.js # retunerer "15 passing"
+mocha test.js # retunerer "15 passing"
 ```
