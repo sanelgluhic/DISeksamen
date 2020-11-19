@@ -1,5 +1,5 @@
 # BankingSystem
-BankingSystem er et simpelt banksystem til en bankkasserer, udviklet til at kunne håndtere både klienter (clients) og konti (accounts). Systemet består af simple CRUD (Create, Read, Update, Delete) funktioner både på client- og account-siden. Funktionerne skaber et simpelt interface, hvor det er muligt at:
+BankingSystem er et simpelt banksystem til en bankkasserer, udviklet til, at kunne håndtere både klienter (clients) og konti (accounts). Systemet består af simple CRUD (Create, Read, Update, Delete) funktioner, på både client- og account-siden. Funktionerne skaber et simpelt interface, hvor det er muligt at:
 
 **Client siden**
 * Oprette ny clienter
