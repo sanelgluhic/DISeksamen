@@ -1,13 +1,9 @@
 const mongoose = require("mongoose");
 const Client = require('./API-filer/models/clients');
 const Account = require('./API-filer/models/accounts');
-// const Client = require("./banking_application/models/client");
-// const Account = require("./banking_application/models/account");
 const fetch = require("node-fetch");
 const chai = require("chai");
 const should = chai.should();
-// const config = require("./load-balancer"); Jeg starter load-balancer i "npm start"
-// const expect = require('chai').expect;
 const chaiHttp = require("chai-http");
 const { expect } = require("chai");
 chai.use(chaiHttp);
