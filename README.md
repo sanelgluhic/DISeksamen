@@ -16,7 +16,7 @@ BankingSystem er et simpelt banksystem til en bankkasserer, udviklet til, at kun
 
 ## Hvordan køres programmet?
 ### Step 1 - eksekver filerne
-Kør "npm start" fra mappen "\bankingSystemDISeksamen" for at eksekvere følgende kommandoer på en gang;
+Kør "npm start" fra mappen "\DISeksamen" for at eksekvere følgende kommandoer på en gang;
 * "npm run seaport listen 9090", 
 * "load-balancer.js", 
 * 2x "app.js" (2 servere startes)
@@ -29,5 +29,5 @@ npm start
 Kør "test.js" fra mappen "\DISeksamen", for at teste systemet
 
 ```bash
-mocha test.js # retunerer "15 passing"
+npm test # retunerer "15 passing"
 ```
