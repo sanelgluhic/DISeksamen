@@ -14,15 +14,15 @@ var credentials = {key: fs.readFileSync(path.join(__dirname, 'cerKey', 'key.pem'
     cert: fs.readFileSync(path.join(__dirname, 'cerKey', 'cert.pem'))};
 
 // Oprettelse af en proxy server som muliggøre at videresende request til et mål som er selvdefineret.
-var proxy = new httpProxy.createProxyServer({}); // skal dette ændres?
+var proxy = new httpProxy.createProxyServer({});
 
 var i = -1;
 
 
-var server = https.createServer(credentials,function(req, res) {
+var socket = https.createServer(credentials,function(req, res) {
     /* seaportConnect.query søger igennem alle registerede servere (jo flere åbne app.js filer, jo flere servere).
 	Dette gemmes som et array, hvis array er tom = ingen servere ledige */
-    addresses = seaportConnect.query('httpsServer', 'httpsServer1');
+    addresses = seaportConnect.query('httpsServer');
     if (!addresses.length) {
         res.writeHead(503, { 'Content-Type': 'text/plain' });
         res.end('Service unavailable');
@@ -30,7 +30,9 @@ var server = https.createServer(credentials,function(req, res) {
     }
     // Proxy itererer igennem vores array hver gang den får en request
     i = (i + 1) % addresses.length;
+    console.log(addresses[i].host);
     var host = addresses[i].host.split(":").reverse()[0];
+    console.log(host);
     var port = addresses[i].port;
     //Brug af vores proxy-instans til at kalde proxy.web og sende  request videre til målet
     proxy.web(req, res, { target: 'https://' + host + ':' + port , secure:false});
@@ -38,7 +40,7 @@ var server = https.createServer(credentials,function(req, res) {
 });
 
 // Loadbalancer lytter på port 3443
-server.listen(3443, function () {
+socket.listen(3443, function () {
     console.log('load balancer listening on port 3443');
 });
 

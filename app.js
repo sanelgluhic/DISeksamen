@@ -37,10 +37,9 @@ var credentials = {key: fs.readFileSync(path.join(__dirname, 'cerKey', 'key.pem'
 // Oprettelse af server
 var httpsServer = https.createServer(credentials, app);
 
-var httpsServer1 = https.createServer(credentials, app);
 
 /* Får server til at lytte igennem en seaport instans efter eventuelle request
 her kan man i princippet kører flere app.js filer, for at intialisere flere severe */
-httpsServer.listen(ports.register('httpsServer', 'httpsServer1'), function () {
+httpsServer.listen(ports.register('httpsServer'), function () {
     console.log('Server listening on %d', this.address().port);
 });
