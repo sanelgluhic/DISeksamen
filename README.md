@@ -15,8 +15,8 @@ BankingSystem er et simpelt banksystem til en bankkasserer, udviklet til, at kun
 * Slet en account
 
 ## Hvordan køres programmet?
-### Step 1 - Instaler NPM
-Kør npm install fra mappen "\DISeksamen"
+### Step 1 - Installere NPM
+Kør "npm install" fra mappen "\DISeksamen". Denne installere alle nødvendige dependencies 
 ```bash
 npm install 
 ```
