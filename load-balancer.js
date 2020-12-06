@@ -30,9 +30,7 @@ var socket = https.createServer(credentials,function(req, res) {
     }
     // Proxy itererer igennem vores array hver gang den får en request
     i = (i + 1) % addresses.length;
-    console.log(addresses[i].host);
     var host = addresses[i].host.split(":").reverse()[0];
-    console.log(host);
     var port = addresses[i].port;
     //Brug af vores proxy-instans til at kalde proxy.web og sende  request videre til målet
     proxy.web(req, res, { target: 'https://' + host + ':' + port , secure:false});
