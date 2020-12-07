@@ -15,13 +15,25 @@ BankingSystem er et simpelt banksystem til en bankkasserer, udviklet til, at kun
 * Slet en account
 
 ## Hvordan køres programmet?
-### Step 1 - Installere NPM
+### Step 1 - Ændre database URL
+Idet at jeg og du sikkert ikke har samme databasenavn, så bør URL'en til databasen ændres følgende steder:
+
+* /DISeksamen/app.js - linje 16
+* /DISeksamen/test.js - linje 13
+
+Følgende link kan bruges, hvor "port" og database navn blot tilpasses til egen database:
+
+```bash
+'mongodb://localhost: <port> / <database navn>'
+```
+
+### Step 2 - Installere NPM
 Kør "npm install" fra mappen "\DISeksamen". Denne installere alle nødvendige dependencies 
 ```bash
 npm install 
 ```
 
-### Step 2 - eksekver filerne
+### Step 3 - eksekver filerne
 Kør "npm start" fra mappen "\DISeksamen" for at eksekvere følgende kommandoer på en gang;
 * "npm run seaport listen 9090", 
 * "load-balancer.js", 
@@ -31,7 +43,7 @@ Kør "npm start" fra mappen "\DISeksamen" for at eksekvere følgende kommandoer 
 npm start
 ```
 
-### Step 3 - eksekver testen
+### Step 4 - eksekver testen
 Kør "test.js" fra mappen "\DISeksamen", for at teste systemet
 
 ```bash
