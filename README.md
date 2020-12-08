@@ -18,6 +18,8 @@ BankingSystem er et simpelt banksystem til en bankkasserer, udviklet til, at kun
 ### Step 1 - Ændre database URL
 Idet at jeg og du sikkert ikke har samme databasenavn, så bør URL'en til databasen ændres følgende steder:
 
+
+
 * /DISeksamen/app.js - linje 16
 * /DISeksamen/test.js - linje 13
 
@@ -28,6 +30,10 @@ Følgende link kan bruges, hvor "port" og database navn blot tilpasses til egen 
 ```
 
 ### Step 2 - Installere NPM
+OBS! Dette step skal kun bruges, hvis man vælger at clone projektet fra github. 
+
+GitHub link til cloning: https://github.com/sanelgluhic/DISeksamen.git
+
 Kør "npm install" fra mappen "\DISeksamen". Denne installere alle nødvendige dependencies 
 ```bash
 npm install 
